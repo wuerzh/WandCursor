@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WandCursor · 法杖预览</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0c0b10;
+    --panel:#141320;
+    --ink:#ece6da;
+    --muted:#8b8597;
+    --gold:#e7b54e;
+    --gold-soft:#f3d488;
+    --line:#26233a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 700px at 78% -10%, #1d1830 0%, rgba(29,24,48,0) 60%),
+      radial-gradient(900px 600px at 8% 110%, #16182a 0%, rgba(22,24,42,0) 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Spline Sans Mono", ui-monospace, monospace;
+    -webkit-font-smoothing:antialiased;
+    padding:46px clamp(18px,5vw,72px) 90px;
+    line-height:1.55;
+  }
+  .wrap{max-width:1180px;margin:0 auto;}
+  .kicker{
+    font-size:12px;letter-spacing:.42em;text-transform:uppercase;
+    color:var(--gold);margin:0 0 14px;font-weight:600;
+  }
+  h1{
+    font-family:"Fraunces", serif;font-weight:900;
+    font-size:clamp(34px,6vw,68px);line-height:.98;margin:0 0 18px;
+    letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic;color:var(--gold-soft);font-weight:400;}
+  .lede{max-width:660px;color:var(--muted);font-size:15px;margin:0 0 6px;}
+  .lede b{color:var(--ink);font-weight:500;}
+  section{margin-top:60px;}
+  h2{
+    font-family:"Fraunces",serif;font-weight:600;font-size:26px;
+    margin:0 0 4px;letter-spacing:-.01em;
+  }
+  .sub{color:var(--muted);font-size:13px;margin:0 0 22px;}
+  /* hero */
+  .hero{
+    position:relative;border:1px solid var(--line);border-radius:18px;overflow:hidden;
+    background:linear-gradient(135deg,#0f1320 0%, #1a1430 48%, #2a1626 100%);
+    display:flex;justify-content:center;align-items:center;min-height:420px;
+  }
+  .hero canvas{display:block;}
+  .legend{
+    position:absolute;left:26px;bottom:22px;display:flex;flex-wrap:wrap;gap:7px 16px;
+    font-size:12px;color:var(--muted);
+  }
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:middle;}
+  /* grid */
+  .grid{display:flex;flex-direction:column;gap:18px;}
+  .row{
+    border:1px solid var(--line);border-radius:14px;background:var(--panel);
+    padding:16px 18px;
+  }
+  .rowhead{display:flex;align-items:baseline;gap:12px;margin:0 0 14px;}
+  .rowhead h3{margin:0;font-family:"Fraunces",serif;font-weight:600;font-size:17px;}
+  .rowhead span{color:var(--muted);font-size:12px;}
+  .cells{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .cell{display:flex;flex-direction:column;gap:8px;}
+  .cap{display:flex;justify-content:space-between;align-items:center;font-size:12px;}
+  .cap b{font-weight:600;color:var(--ink);}
+  .cap.rec b{color:var(--gold);}
+  .badge{font-size:10px;letter-spacing:.12em;color:#0c0b10;background:var(--gold);
+    border-radius:999px;padding:2px 8px;font-weight:600;text-transform:uppercase;}
+  .frame{
+    border-radius:10px;overflow:hidden;position:relative;aspect-ratio:1/1;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
+  }
+  .frame canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .specs{
+    margin-top:30px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;
+  }
+  .spec{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--panel);}
+  .spec h4{margin:0 0 10px;font-family:"Fraunces",serif;font-weight:600;font-size:15px;color:var(--gold-soft);}
+  .spec table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .spec td{padding:3px 0;color:var(--muted);vertical-align:top;}
+  .spec td.v{color:var(--ink);text-align:right;font-weight:500;}
+  .spec del{color:#6a6478;}
+  @media(max-width:780px){.cells{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">WandCursor · Preview</p>
+  <h1>极简<em>魔杖</em>指针</h1>
+  <p class="lede"><b>原程序</b>把一支红色梯形「杖身 + 银环 + 黑柄」贴在光标上。重设计保留「魔杖指向光标」这一核心隐喻，做成一支<b>玻璃光泽绯红杖身、金色箍环与杖头、象牙杖尖</b>的精致魔杖。<b>光标周围不加任何辉光与星芒</b>，杖尖精确指向光标，绝不遮挡下方材料与界面文字。下面是与原版的并排对比，以及三套配色，全部按 GDI+ 能力 1:1 绘制（多段渐变 / 路径填充 / alpha），扁平无投影。</p>
+
+  <section>
+    <h2>推荐方案 · 绯红术士 <span style="font-family:'Spline Sans Mono';font-size:13px;color:var(--muted)">(Crimson Sorcerer)</span></h2>
+    <p class="sub">下图为 1:1 真实像素尺寸。窗口由 520×520 收紧到 320×320，光标锚点 (64,64)，杖长 340→300。</p>
+    <div class="hero">
+      <canvas id="hero" width="660" height="440"></canvas>
+      <div class="legend">
+        <span><i style="background:#f3e9d4"></i>象牙杖尖（指向光标）</span>
+        <span><i style="background:#c4170c"></i>绯红杖身（柱面高光）</span>
+        <span><i style="background:#e7b54e"></i>金色箍环 + 杖头</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>并排对比</h2>
+    <p class="sub">四列：原设计 · 绯红术士（推荐）· 黑曜金 · 秘银霜寒。四行背景模拟真实使用场景（亮底文档 / 暗底界面 / 彩色幻灯 / 桌面棋盘格）。</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <h2>关键参数</h2>
+    <div class="specs">
+      <div class="spec">
+        <h4>尺寸与比例</h4>
+        <table>
+          <tr><td>窗口</td><td class="v"><del>520²</del> → 320²</td></tr>
+          <tr><td>光标锚点</td><td class="v"><del>90,90</del> → 64,64</td></tr>
+          <tr><td>杖长</td><td class="v"><del>340</del> → 300</td></tr>
+          <tr><td>角度</td><td class="v">45° (保留)</td></tr>
+          <tr><td>每帧重绘像素</td><td class="v">↓ 62%</td></tr>
+        </table>
+      </div>
+      <div class="spec">
+        <h4>分段（杖尖→杖头）</h4>
+        <table>
+          <tr><td>象牙尖</td><td class="v">34 · 半宽 0→5</td></tr>
+          <tr><td>绯红杖身</td><td class="v">180 · 5→8.5</td></tr>
+          <tr><td>金箍环</td><td class="v">14 · 9.6</td></tr>
+          <tr><td>握柄</td><td class="v">60 · 9→9.6</td></tr>
+          <tr><td>金杖头</td><td class="v">12 · 圆顶</td></tr>
+        </table>
+      </div>
+      <div class="spec">
+        <h4>视觉升级</h4>
+        <table>
+          <tr><td>光标周围</td><td class="v">无辉光 · 无星芒</td></tr>
+          <tr><td>柱面光泽</td><td class="v">垂直多段渐变</td></tr>
+          <tr><td>高光线</td><td class="v">沿杖身镜面反射</td></tr>
+          <tr><td>杖尖对齐</td><td class="v">精确指向光标</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ----------------------------------------------------------------------------
+   忠实于 GDI+ 的绘制：仅用 线性多段渐变 / 径向渐变 / 路径填充 / globalAlpha,
+   不用 canvas 的 shadowBlur（GDI+ 无等价廉价实现），扁平无投影。
+   所有几何常量与最终移植到 C 的常量一一对应。
+---------------------------------------------------------------------------- */
+const ANG = Math.PI / 4;
+const AX = Math.cos(ANG), AY = Math.sin(ANG);   // 轴向
+const NX = -AY, NY = AX;                          // 法向
+
+// 分段表（从杖尖=光标 出发），len 沿轴，w 为半宽
+const SEG = [
+  { len: 34,  w0: 0.0, w1: 5.0, mat: 'tip'   },
+  { len: 180, w0: 5.0, w1: 8.5, mat: 'shaft' },
+  { len: 14,  w0: 9.6, w1: 9.6, mat: 'metal' },
+  { len: 60,  w0: 9.0, w1: 9.6, mat: 'shaft' },
+  { len: 12,  w0: 9.6, w1: 7.5, mat: 'metal', cap: true },
+];
+
+// 配色 ----------------------------------------------------------------------
+const PAL = {
+  gold: {
+    name: 'Obsidian & Gold',
+    shaft: [[0,'#0e0e13'],[0.28,'#3f4253'],[0.5,'#23242e'],[0.72,'#16161d'],[1,'#0a0a0e']],
+    metal: [[0,'#6e4711'],[0.22,'#ffe7a0'],[0.44,'#ecbb55'],[0.64,'#b9831f'],[1,'#5a3a0f']],
+    tip:   [[0,'#cdbf9f'],[0.3,'#fffaf0'],[0.55,'#f1e6cf'],[1,'#c7b48f']],
+    glowRGB: [255,201,107],
+    spec:  'rgba(255,255,255,.85)',
+    spark: '#fff7e4', sparkGlow: 'rgba(255,224,150,.9)',
+  },
+  crimson: {
+    name: 'Crimson Sorcerer',
+    shaft: [[0,'#350406'],[0.27,'#ff5638'],[0.5,'#a3160c'],[0.72,'#6c0c07'],[1,'#2a0304']],
+    metal: [[0,'#6e4711'],[0.22,'#ffe7a0'],[0.44,'#ecbb55'],[0.64,'#b9831f'],[1,'#5a3a0f']],
+    tip:   [[0,'#cdbf9f'],[0.3,'#fffaf0'],[0.55,'#f1e6cf'],[1,'#c7b48f']],
+    glowRGB: [255,150,85],
+    spec:  'rgba(255,245,235,.85)',
+    spark: '#fff0e0', sparkGlow: 'rgba(255,150,90,.9)',
+  },
+  frost: {
+    name: 'Arcane Frost',
+    shaft: [[0,'#0a131e'],[0.27,'#7196bd'],[0.5,'#1b2a3c'],[0.72,'#111c29'],[1,'#070d15']],
+    metal: [[0,'#48586c'],[0.22,'#f5faff'],[0.44,'#c2d1e1'],[0.64,'#8295ab'],[1,'#45556a']],
+    tip:   [[0,'#9fb3c4'],[0.3,'#f7fbff'],[0.55,'#dce9f3'],[1,'#a9bccd']],
+    glowRGB: [120,200,255],
+    spec:  'rgba(245,251,255,.9)',
+    spark: '#eaf7ff', sparkGlow: 'rgba(150,215,255,.9)',
+  },
+};
+
+function P(ox, oy, d, off){ return [ox + AX*d + NX*off, oy + AY*d + NY*off]; }
+
+function quad(ctx, ox, oy, d0, d1, w0, w1){
+  const a = P(ox,oy,d0, w0), b = P(ox,oy,d1, w1), c = P(ox,oy,d1,-w1), e = P(ox,oy,d0,-w0);
+  ctx.beginPath();
+  ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.lineTo(c[0],c[1]); ctx.lineTo(e[0],e[1]);
+  ctx.closePath();
+}
+
+function perpGrad(ctx, ox, oy, d0, d1, w0, w1, stops){
+  const dm = (d0+d1)/2, W = Math.max(w0,w1);
+  const g0 = P(ox,oy,dm,-W), g1 = P(ox,oy,dm, W);
+  const g = ctx.createLinearGradient(g0[0],g0[1],g1[0],g1[1]);
+  for (const [p,c] of stops) g.addColorStop(p,c);
+  return g;
+}
+
+function specLine(ctx, ox, oy, d0, d1, off, w, col){
+  const a = P(ox,oy,d0,off), b = P(ox,oy,d1,off);
+  const g = ctx.createLinearGradient(a[0],a[1],b[0],b[1]);
+  g.addColorStop(0,'rgba(255,255,255,0)'); g.addColorStop(.18,col);
+  g.addColorStop(.8,col); g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.strokeStyle = g; ctx.lineWidth = w; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+}
+
+function drawWand(ctx, ox, oy, pal){
+  // 累积轴向起点
+  const segs = []; let d = 0;
+  for (const s of SEG){ segs.push({...s, d0:d, d1:d+s.len}); d += s.len; }
+
+  // 1) 杖身分段（柱面垂直渐变）
+  for (const s of segs){
+    ctx.fillStyle = perpGrad(ctx, ox, oy, s.d0, s.d1, s.w0, s.w1, pal[s.mat]);
+    quad(ctx, ox, oy, s.d0, s.d1, s.w0, s.w1); ctx.fill();
+    if (s.cap){ // 金色圆顶杖头
+      const c = P(ox,oy, s.d1-2, 0);
+      const rg = ctx.createRadialGradient(c[0]+NX*3, c[1]+NY*3, 1, c[0], c[1], 9);
+      rg.addColorStop(0, pal.metal[1][1]); rg.addColorStop(.55, pal.metal[2][1]);
+      rg.addColorStop(1, pal.metal[4][1]);
+      ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(c[0],c[1],8.4,0,Math.PI*2); ctx.fill();
+    }
+  }
+
+  // 2) 镜面高光线（光源右上 = -法向侧）
+  specLine(ctx, ox, oy, 36, 212, -3.0, 1.7, pal.spec);
+  specLine(ctx, ox, oy, 230, 286, -3.4, 1.7, pal.spec);
+}
+
+/* 原始设计（忠实复刻当前 C 代码）---------------------------------------------- */
+function drawOriginal(ctx, ox, oy){
+  const L=340, HANDLE=75, BAND=8, shaftLen=L-HANDLE-BAND; // 257
+  const seg=(d0,d1,w0,w1,grad)=>{ ctx.fillStyle=grad; quad(ctx,ox,oy,d0,d1,w0,w1); ctx.fill(); };
+  // 红杖身 沿轴 alpha 渐变
+  let a=P(ox,oy,0,0), b=P(ox,oy,shaftLen,0);
+  let g=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);
+  g.addColorStop(0,'rgba(175,12,0,1)'); g.addColorStop(1,'rgba(175,12,0,.51)');
+  seg(0,shaftLen,3.5,7,g);
+  // 银环
+  a=P(ox,oy,shaftLen,0); b=P(ox,oy,shaftLen+BAND,0);
+  g=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);
+  g.addColorStop(0,'rgba(180,175,170,.78)'); g.addColorStop(1,'rgba(160,155,150,.7)');
+  seg(shaftLen,shaftLen+BAND,7,7,g);
+  // 黑柄
+  a=P(ox,oy,shaftLen+BAND,0); b=P(ox,oy,L,0);
+  g=ctx.createLinearGradient(a[0],a[1],b[0],b[1]);
+  g.addColorStop(0,'rgba(22,20,18,.94)'); g.addColorStop(1,'rgba(18,16,14,.94)');
+  seg(shaftLen+BAND,L,9,9,g);
+  // 脊线
+  a=P(ox,oy,0,0); b=P(ox,oy,L,0);
+  ctx.strokeStyle='rgba(255,200,160,.235)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+}
+
+/* 背景 ---------------------------------------------------------------------- */
+function paintBG(ctx, w, h, kind){
+  if (kind==='light'){ ctx.fillStyle='#f4f1ea'; ctx.fillRect(0,0,w,h);
+    ctx.strokeStyle='rgba(60,50,40,.06)'; ctx.lineWidth=1;
+    for(let y=24;y<h;y+=22){ctx.beginPath();ctx.moveTo(16,y);ctx.lineTo(w-16,y);ctx.stroke();}
+  } else if (kind==='dark'){ ctx.fillStyle='#14141a'; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='rgba(255,255,255,.04)'; ctx.fillRect(0,0,w,42);
+  } else if (kind==='photo'){
+    const g=ctx.createLinearGradient(0,0,w,h);
+    g.addColorStop(0,'#0e5a6b'); g.addColorStop(.5,'#3a2c7a'); g.addColorStop(1,'#b5275f');
+    ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='rgba(255,255,255,.10)';
+    for(let i=0;i<5;i++){ctx.beginPath();ctx.arc(40+i*70,60+i*48,26+i*6,0,7);ctx.fill();}
+  } else { // checker
+    const s=18; for(let y=0;y<h;y+=s)for(let x=0;x<w;x+=s){
+      ctx.fillStyle=((x/s+y/s)&1)?'#d8d8dd':'#bcbcc4'; ctx.fillRect(x,y,s,s);}
+  }
+}
+
+/* 渲染 ---------------------------------------------------------------------- */
+const DPR = Math.max(2, window.devicePixelRatio||1);
+function setup(canvas, cssW, cssH){
+  canvas.width = cssW*DPR; canvas.height = cssH*DPR;
+  const ctx = canvas.getContext('2d'); ctx.scale(DPR,DPR);
+  return ctx;
+}
+
+// hero
+(function(){
+  const cv=document.getElementById('hero'); const W=660,H=440;
+  const ctx=setup(cv,W,H);
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,'#0f1320'); g.addColorStop(.5,'#1a1430'); g.addColorStop(1,'#2a1626');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  // 窗口边界示意 320²
+  const ox=210, oy=120;
+  ctx.strokeStyle='rgba(255,255,255,.10)'; ctx.setLineDash([5,6]); ctx.lineWidth=1;
+  ctx.strokeRect(ox-64, oy-64, 320, 320); ctx.setLineDash([]);
+  ctx.fillStyle='rgba(255,255,255,.35)'; ctx.font='11px "Spline Sans Mono"';
+  ctx.fillText('window 320×320', ox-60, oy-70);
+  drawWand(ctx, ox, oy, PAL.crimson);
+  // 光标十字
+  ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(ox-7,oy);ctx.lineTo(ox+7,oy);ctx.moveTo(ox,oy-7);ctx.lineTo(ox,oy+7);ctx.stroke();
+})();
+
+// grid
+const ROWS=[
+  {kind:'light', name:'亮底文档', note:'白底 · 看可见度'},
+  {kind:'dark',  name:'暗底界面', note:'深色 UI · 看可见度'},
+  {kind:'photo', name:'彩色幻灯', note:'演示场景 · 看对比度'},
+  {kind:'checker',name:'桌面棋盘格', note:'看透明边缘是否干净'},
+];
+const COLS=[
+  {key:'orig',   label:'原设计', rec:false},
+  {key:'crimson',label:'绯红术士', rec:true},
+  {key:'gold',   label:'黑曜金', rec:false},
+  {key:'frost',  label:'秘银霜寒', rec:false},
+];
+const CELL=276, OX=64, OY=64;
+const grid=document.getElementById('grid');
+ROWS.forEach((row,ri)=>{
+  const r=document.createElement('div'); r.className='row';
+  r.innerHTML=`<div class="rowhead"><h3>${row.name}</h3><span>${row.note}</span></div>`;
+  const cells=document.createElement('div'); cells.className='cells';
+  COLS.forEach(col=>{
+    const cell=document.createElement('div'); cell.className='cell';
+    const cap=document.createElement('div'); cap.className='cap'+(col.rec?' rec':'');
+    cap.innerHTML=`<b>${col.label}</b>`+(col.rec?'<span class="badge">推荐</span>':(ri===0?`<span style="color:var(--muted)">${col.key==='orig'?'当前':''}</span>`:''));
+    const frame=document.createElement('div'); frame.className='frame';
+    const cv=document.createElement('canvas'); frame.appendChild(cv);
+    cell.appendChild(cap); cell.appendChild(frame); cells.appendChild(cell);
+    const ctx=setup(cv,CELL,CELL);
+    paintBG(ctx,CELL,CELL,row.kind);
+    if(col.key==='orig') drawOriginal(ctx,OX,OY); else drawWand(ctx,OX,OY,PAL[col.key]);
+  });
+  r.appendChild(cells); grid.appendChild(r);
+});
+</script>
+</body>
+</html>

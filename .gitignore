@@ -1,0 +1,21 @@
+# Build output. Upload the .exe separately as a GitHub Release asset.
+*.exe
+
+# Compiler intermediates
+*.o
+*.obj
+*.a
+*.lib
+
+# Scratch / experiment files (e.g. _hero.c, _hero.exe)
+_*
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
